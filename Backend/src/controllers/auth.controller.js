@@ -171,4 +171,14 @@ const getMeController = async (req, res, next) => {
     res.status(200).json({ user: req.user });
 };
 
-export { registerController, verifyEmailController, loginController, getMeController };
+// Logout
+const logoutController = async (req, res, next) => {
+    try {
+        res.clearCookie("token");
+        res.status(200).json({ message: "Logout successful" });
+    } catch (error) {
+        res.status(500).json({ message: "Internal server error", error: error.message });
+    }
+};
+
+export { registerController, verifyEmailController, loginController, getMeController, logoutController };
