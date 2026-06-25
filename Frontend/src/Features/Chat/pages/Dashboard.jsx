@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../../Auth/hooks/useAuth";
+import { useChat } from "../hooks/useChat";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, handleLogout } = useAuth();
+  const chat = useChat();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFocus, setSelectedFocus] = useState("All");
+
+  useEffect(() => {
+    chat.initializeSocketConnection();
+  }, []);
 
   const handleSignOut = async () => {
     await handleLogout();
