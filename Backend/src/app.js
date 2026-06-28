@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import authRouter from './routes/auth.routes.js';
+import chatRouter from './routes/chat.routes.js';
 import cookieParser from 'cookie-parser';
 import validationMiddleware from './middlewares/error.middleware.js';
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
 app.use('/api/auth', authRouter);
+app.use('/api/chats', chatRouter);
 
 
 app.use(validationMiddleware);
