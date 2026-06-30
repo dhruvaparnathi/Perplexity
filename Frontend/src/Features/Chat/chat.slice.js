@@ -21,26 +21,47 @@ const chatSlice = createSlice({
         setError(state,action){
             state.error = action.payload;
         },
-        addNewMessage(state,action){
-            const {chatId, title} = action.payload;
+        addNewChat(state, action) {
+            const { chatId, title } = action.payload;
             state.chats[chatId] = {
                 _id: chatId,
                 title,
                 messages: [],
                 lastUpdated: new Date().toISOString()
+            };
+        },
+        addNewMessage(state, action) {
+            const { chatId, content, role } = action.payload;
+            if (state.chats[chatId]) {
+                state.chats[chatId].messages.push({ content, role });
+                state.chats[chatId].lastUpdated = new Date().toISOString();
             }
         },
-        addNewChat(state,action){
-            const {chatId , content, role} = action.payload;
-            state.chats[chatId].messages.push({content, role});
+        setChatMessages(state, action) {
+            const { chatId, messages } = action.payload;
+            if (state.chats[chatId]) {
+                state.chats[chatId].messages = messages;
+                state.chats[chatId].lastUpdated = new Date().toISOString();
+            }
         },
-        addMessagesToChat(state,action){
-            const {chatId , messages} = action.payload;
-            state.chats[chatId].messages.push(...messages);
-            state.chats[chatId].lastUpdated = new Date().toISOString();
+        deleteChatFromState(state, action) {
+            const chatId = action.payload;
+            delete state.chats[chatId];
+            if (state.currentChatId === chatId) {
+                state.currentChatId = null;
+            }
         }
     }
-})
+});
 
-export const {setChats, setCurrentChatId, setIsLoading, setError, addNewMessage, addNewChat, addMessagesToChat} = chatSlice.actions;
+export const {
+    setChats,
+    setCurrentChatId,
+    setIsLoading,
+    setError,
+    addNewChat,
+    addNewMessage,
+    setChatMessages,
+    deleteChatFromState
+} = chatSlice.actions;
 export default chatSlice.reducer;
